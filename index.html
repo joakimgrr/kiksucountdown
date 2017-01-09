@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Kiksu &lt;3 </title>
+</head>
+<body>
+    <div class="wrapper">
+        <div id="timer">
+            <span id="days"></span>
+            <span id="hours"></span>
+            <span id="minutes"></span>
+            <span id="seconds"></span>
+        </div>
+    </div>
+
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #000;
+            background-image: url('bg.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+        }
+
+        .wrapper {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #timer span {
+            font-family: arial;
+            font-weight: bold;
+            color: #fff;
+            font-size: 6.5em;
+            display: block;
+            text-align: center;
+        }
+
+        #timer span::after {
+            font-size: 0.5em;
+            line-height: 0.5em;
+            display: block;
+            font-weight: 200;
+            margin-bottom: 0.5em;
+        }
+
+        #days::after {
+            content: 'days';
+        }
+
+        #hours::after {
+            content: 'hours';
+        }
+
+        #minutes::after {
+            content: 'minutes';
+        }
+
+        #seconds::after {
+            content: 'seconds';
+        }
+
+    </style>
+    <script>
+        var previousSet = {
+            'seconds': 0,
+            'minutes': 0,
+            'hours': 0,
+            'days': 0
+        }
+        var elements = {
+            'days': document.getElementById('days'),
+            'hours': document.getElementById('hours'),
+            'minutes': document.getElementById('minutes'),
+            'seconds': document.getElementById('seconds')
+        }
+        var then = new Date(2017, 0, 21, 18, 30, 0);
+
+        function diff(then) {
+            var now = new Date();
+            var diff = (then - now);
+            var seconds = Math.floor((diff/1000) % 60);
+            var minutes = Math.floor((diff/(1000*60)) % 60);
+            var hours = Math.floor((diff/(1000*60*60)) % 24);
+            var days = Math.floor(diff/(1000*60*60*24));
+
+            return {
+                'seconds': seconds,
+                'minutes': minutes,
+                'hours': hours,
+                'days': days
+            }
+        }
+
+        function updateElements(timeset) {
+            for (var k in timeset) {
+                if (!timeset.hasOwnProperty(k)) continue;
+
+                if (previousSet[k] !== timeset[k]) {
+                    elements[k].textContent = ('0' + timeset[k]).substr(-2);
+                }
+            }
+            previousSet = timeset;
+        }
+
+        function updateTime() {
+            var timeset = diff(then);
+            updateElements(timeset);
+        }
+
+        window.setInterval(function() {
+            updateTime();
+        }, 1000);
+
+        updateTime();
+    </script>
+
+</body>
+</html>
